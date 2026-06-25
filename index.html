@@ -10,19 +10,17 @@
 
       <script>
             window.addEventListener('beforeinstallprompt', (e) => {
-                  // Prevenimos la acción por defecto
                   e.preventDefault();
-                  // Guardamos el evento en la ventana global para que Vue lo encuentre
                   window.eventoPWA = e;
             });
       </script>
-  <script type="module" crossorigin src="/assets/index-BGqQTzru.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-CmwZufst.css">
-<link rel="manifest" href="/manifest.webmanifest"></head>
+      <script type="module" crossorigin src="/assets/index-BGqQTzru.js"></script>
+      <link rel="stylesheet" crossorigin href="/assets/index-CmwZufst.css">
+      <link rel="manifest" href="/manifest.webmanifest">
+</head>
 
 <body>
       <div id="app"></div>
-
 </body>
 
 </html>
