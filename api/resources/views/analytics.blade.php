@@ -1,0 +1,1 @@
+$aFavor = App\Models\Votante::where('simpatia', 'favor')->count();

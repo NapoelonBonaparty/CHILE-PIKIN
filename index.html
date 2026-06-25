@@ -17,6 +17,200 @@
       <script type="module" crossorigin src="/assets/index-BGqQTzru.js"></script>
       <link rel="stylesheet" crossorigin href="/assets/index-CmwZufst.css">
       <link rel="manifest" href="/manifest.webmanifest">
+
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+      <style>
+            /* Coreografía de entrada suave y elástica */
+            @keyframes elegantFadeInUp {
+                  0% { 
+                        opacity: 0; 
+                        transform: translateY(25px) scale(0.97); 
+                  }
+                  100% { 
+                        opacity: 1; 
+                        transform: translateY(0) scale(1); 
+                  }
+            }
+
+            /* Aplicamos la animación SOLO si el body tiene la clase 'en-dashboard' */
+            body.en-dashboard .layout-main-container > div > div > div {
+                  opacity: 0; /* Oculto antes de animar */
+                  /* Usamos cubic-bezier para un efecto de aceleración/desaceleración premium */
+                  animation: elegantFadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+                  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+            }
+
+            /* Efecto Cascada (Staggering) para que entren una por una */
+            body.en-dashboard .layout-main-container > div > div > div:nth-child(1) { animation-delay: 0.05s; }
+            body.en-dashboard .layout-main-container > div > div > div:nth-child(2) { animation-delay: 0.15s; }
+            body.en-dashboard .layout-main-container > div > div > div:nth-child(3) { animation-delay: 0.25s; }
+            body.en-dashboard .layout-main-container > div > div > div:nth-child(4) { animation-delay: 0.35s; }
+            body.en-dashboard .layout-main-container > div > div > div:nth-child(5) { animation-delay: 0.45s; }
+
+            /* Interactividad elegante al pasar el ratón (Hover) */
+            body.en-dashboard .layout-main-container > div > div > div:hover {
+                  transform: translateY(-6px) scale(1.015) !important;
+                  box-shadow: 0 22px 40px rgba(0,0,0,0.06) !important;
+                  cursor: pointer;
+            }
+
+            /* Ajuste sutil del hover para el modo noche */
+            body.layout-dark.en-dashboard .layout-main-container > div > div > div:hover {
+                  box-shadow: 0 22px 40px rgba(255,255,255,0.03) !important;
+            }
+      </style>
+
+      <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                  let instanciaGrafica = null;
+
+                  const selectorVigilante = new MutationObserver(() => {
+                        const contenedorDashboard = document.querySelector('.layout-main-container > div');
+                        const esResumenElectoral = document.body.innerText.includes('Tablero Estratégico');
+                        const graficaExistente = document.getElementById('tarjetaGraficaComalapa');
+
+                        if (contenedorDashboard && esResumenElectoral) {
+                              
+                              // Activamos las animaciones CSS agregando la clase al body
+                              document.body.classList.add('en-dashboard');
+
+                              // Lógica de inyección de la gráfica
+                              if (!graficaExistente) {
+                                    const favor = 10;
+                                    const indecisos = 11;
+                                    const contra = 18;
+
+                                    const tarjetaGrafica = document.createElement('div');
+                                    tarjetaGrafica.className = 'col-12 xl:col-6';
+                                    tarjetaGrafica.id = 'tarjetaGraficaComalapa';
+                                    tarjetaGrafica.style.marginTop = '20px';
+                                    // Esta tarjeta también se animará automáticamente gracias al CSS
+                                    tarjetaGrafica.innerHTML = `
+                                          <div class="card surface-card shadow-2 p-4 border-round" style="background: var(--surface-card); height: 100%;">
+                                                <div class="text-900 font-medium text-xl mb-3">Distribución del Padrón Electoral</div>
+                                                <div style="height: 280px; display: flex; justify-content: center; align-items: center;">
+                                                      <canvas id="graficaComalapa"></canvas>
+                                                </div>
+                                          </div>
+                                    `;
+
+                                    contenedorDashboard.appendChild(tarjetaGrafica);
+
+                                    const ctx = document.getElementById('graficaComalapa').getContext('2d');
+                                    instanciaGrafica = new Chart(ctx, {
+                                          type: 'doughnut',
+                                          data: {
+                                                labels: ['A Favor', 'Indecisos', 'En Contra'],
+                                                datasets: [{
+                                                      data: [favor, indecisos, contra],
+                                                      backgroundColor: ['#4ade80', '#facc15', '#f87171'],
+                                                      borderWidth: 0,
+                                                      hoverOffset: 8 // Expansión al pasar el mouse por la gráfica
+                                                }]
+                                          },
+                                          options: {
+                                                responsive: true,
+                                                maintainAspectRatio: false,
+                                                cutout: '65%', // Dona más delgada y elegante
+                                                plugins: {
+                                                      legend: {
+                                                            position: 'bottom',
+                                                            labels: {
+                                                                  font: { family: 'Lato', size: 13 },
+                                                                  color: document.body.classList.contains('layout-dark') ? '#F8F9FA' : '#495057'
+                                                            }
+                                                      }
+                                                }
+                                          }
+                                    });
+                              }
+                        } else {
+                              // El usuario cambió de sección. Apagamos las animaciones y destruimos la gráfica.
+                              document.body.classList.remove('en-dashboard');
+                              
+                              if (graficaExistente) {
+                                    if (instanciaGrafica) {
+                                          instanciaGrafica.destroy();
+                                          instanciaGrafica = null;
+                                    }
+                                    graficaExistente.remove();
+                              }
+                        }
+                  });
+
+                  selectorVigilante.observe(document.body, {
+                        childList: true,
+                        subtree: true
+                  });
+            });
+      </script>
+
+
+
+      <!-- 3. SISTEMA DE SEGURIDAD REACTIVO: Marca de Agua Forense -->
+      <style>
+            #watermark-shield {
+                  position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
+                  pointer-events: none; z-index: 99999; display: flex; flex-wrap: wrap;
+                  justify-content: center; align-content: center; overflow: hidden;
+                  opacity: 0.05; /* Un toque más sutil */
+            }
+            .watermark-item {
+                  transform: rotate(-35deg); font-family: 'Lato', sans-serif;
+                  font-size: 1.2rem; font-weight: 900; color: #888;
+                  padding: 40px 80px; user-select: none; text-transform: uppercase;
+                  letter-spacing: 2px;
+            }
+      </style>
+
+      <script>
+            async function actualizarMarcaAgua() {
+                  // 1. Limpiamos cualquier marca previa para evitar duplicados
+                  const viejaMarca = document.getElementById('watermark-shield');
+                  if (viejaMarca) viejaMarca.remove();
+
+                  // 2. Intentamos obtener el usuario real del localStorage de forma fresca
+                  const sessionData = localStorage.getItem('usuario_electoral');
+                  
+                  if (sessionData) {
+                        try {
+                              const usuario = JSON.parse(sessionData);
+                              // Ajustamos según la estructura real de tu objeto de usuario
+                              const nombre = usuario.name || usuario.nombre || 'Usuario';
+                              const login = usuario.username || 'N/A';
+                              const fecha = new Date().toLocaleDateString('es-MX');
+                              
+                              const textoMarca = `CONFIDENCIAL • ${nombre} (${login}) • FECHA: ${fecha}`;
+
+                              const escudoDiv = document.createElement('div');
+                              escudoDiv.id = 'watermark-shield';
+
+                              for (let i = 0; i < 60; i++) {
+                                    const span = document.createElement('div');
+                                    span.className = 'watermark-item';
+                                    span.innerText = textoMarca;
+                                    escudoDiv.appendChild(span);
+                              }
+                              document.body.appendChild(escudoDiv);
+                        } catch (e) {
+                              console.error("Error al actualizar marca:", e);
+                        }
+                  }
+            }
+
+            // 3. Vigilamos cambios: Recargamos marca si detectamos cambio de sesión o navegación
+            document.addEventListener('DOMContentLoaded', actualizarMarcaAgua);
+            
+            // Si el sistema navega sin recargar (SPA), vigilamos cambios en el localStorage
+            window.addEventListener('storage', actualizarMarcaAgua);
+            
+            // Forzamos actualización constante cada vez que el usuario navega entre menús
+            const observer = new MutationObserver(actualizarMarcaAgua);
+            observer.observe(document.body, { childList: true, subtree: true });
+      </script>
+
+
 </head>
 
 <body>
